@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniel Taylor | R2D2 Data Slicer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Master Prompt Theme: Star Wars Hologram Dashboard (Imperial Edition) */
+        body { 
+            background-color: #030712; 
+            color: #e5e7eb; 
+            font-family: 'Courier New', Courier, monospace; 
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* --- BACKGROUND LAYERS --- */
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 200vw;
+            height: 200vh;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            pointer-events: none;
+            transition: transform 0.8s cubic-bezier(0.5, 0, 0.1, 1), opacity 0.8s ease-in;
+        }
+
+        /* The Base Starfield */
+        body::before {
+            background-image: 
+                radial-gradient(1px 1px at 15px 15px, rgba(255, 255, 255, 0.8) 100%, transparent),
+                radial-gradient(1px 1px at 75px 25px, rgba(255, 255, 255, 0.4) 100%, transparent),
+                radial-gradient(1.5px 1.5px at 135px 85px, rgba(224, 242, 254, 0.6) 100%, transparent),
+                radial-gradient(1px 1px at 15px 115px, rgba(34, 211, 238, 0.3) 100%, transparent),
+                radial-gradient(2px 2px at 90px 140px, rgba(255, 255, 255, 0.5) 100%, transparent),
+                radial-gradient(1px 1px at 180px 40px, rgba(255, 255, 255, 0.3) 100%, transparent),
+                radial-gradient(1px 1px at 220px 170px, rgba(224, 242, 254, 0.7) 100%, transparent);
+            background-size: 250px 250px;
+            opacity: 1;
+        }
+
+        /* The Radial Hyperdrive Streaks */
+        body::after {
+            background: repeating-conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                transparent 3deg,
+                rgba(255, 255, 255, 0.9) 3.1deg,
+                rgba(255, 255, 255, 0.9) 3.3deg,
+                transparent 3.4deg,
+                transparent 12deg,
+                rgba(224, 242, 254, 0.7) 12.1deg,
+                rgba(224, 242, 254, 0.7) 12.4deg,
+                transparent 12.5deg
+            );
+            -webkit-mask-image: radial-gradient(circle, transparent 15%, black 70%);
+            mask-image: radial-gradient(circle, transparent 15%, black 70%);
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.1);
+        }
+
+        /* --- HYPERDRIVE ANIMATION STATE --- */
+        body.hyperdrive-active::before {
+            transform: translate(-50%, -50%) scale(3);
+            opacity: 0;
+        }
+
+        body.hyperdrive-active::after {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(2);
+        }
+
+        /* --- IMPERIAL / SITH UI STYLING --- */
+        .sith-panel { 
+            background: rgba(220, 38, 38, 0.05); /* Deep red tint */
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.1);
+        }
+        
+        .btn-sith {
+            background: rgba(153, 27, 27, 0.2);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            transition: all 0.3s ease;
+        }
+        .btn-sith:hover {
+            background: rgba(153, 27, 27, 0.5);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+            color: #ffffff;
+        }
+
+        /* Retro Terminal Styling */
+        .terminal-screen {
+            background-color: #000000;
+            color: #22c55e; /* Retro R2D2 Green */
+            text-shadow: 0 0 5px rgba(34, 197, 94, 0.5);
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        /* Keep the back button standard cyan to match index */
+        .btn-primary {
+            background: rgba(8, 145, 178, 0.2);
+            border: 1px solid #22d3ee;
+            transition: all 0.3s ease;
+            color: #67e8f9;
+        }
+        .btn-primary:hover {
+            background: rgba(8, 145, 178, 0.4);
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
+        }
+        
+        /* Loading Bar Animation */
+        @keyframes loadProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        .animate-load {
+            animation: loadProgress 2.5s ease-in-out forwards;
+        }
+    </style>
+</head>
+<body class="p-6 md:p-12 max-w-5xl mx-auto flex flex-col gap-8">
+
+    <!-- Navigation / Back Button -->
+    <nav class="w-full">
+        <a href="index.html" class="btn-primary px-4 py-2 rounded font-bold uppercase tracking-wider text-xs inline-flex items-center gap-2 relative z-10">
+            <span class="text-lg leading-none">←</span> Return to Main Terminal
+        </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="text-center md:text-left border-b border-red-900 pb-4 relative z-10">
+        <h1 class="text-3xl font-bold text-red-500 tracking-widest uppercase">R2D2 Data Slicer</h1>
+        <p class="text-red-800 mt-2 text-sm">Imperial Databank Infiltration & Data Standardization</p>
+    </header>
+
+    <!-- Main Console Grid -->
+    <main class="grid md:grid-cols-2 gap-8 relative z-10">
+        
+        <!-- Left Column: Retro Terminal Window -->
+        <div class="sith-panel rounded-xl p-4 flex flex-col">
+            <div class="flex justify-between items-center mb-3 border-b border-red-900 pb-2">
+                <span class="text-xs uppercase tracking-widest text-red-500">Target: Corrupted Imperial Databanks</span>
+                <span class="text-xs text-red-700 animate-pulse">ENCRYPTION: ACTIVE</span>
+            </div>
+            
+            <!-- Terminal Output Area -->
+            <div id="terminal-container" class="terminal-screen rounded p-4 h-80 overflow-hidden text-xs flex flex-col justify-end border border-gray-800 relative">
+                <!-- Chaotic data will be injected here by JS -->
+                <div id="terminal-content" class="space-y-1 opacity-80"></div>
+                
+                <!-- Clean Data Table (Hidden initially) -->
+                <div id="clean-data" class="hidden w-full h-full flex-col">
+                    <div class="text-center text-white mb-4 border-b border-green-500/50 pb-2">DATABANK DECRYPTED - 5,000 ROWS NORMALIZED</div>
+                    <table class="w-full text-left text-[10px] md:text-xs">
+                        <thead>
+                            <tr class="text-gray-400 border-b border-gray-700">
+                                <th class="pb-2">Proj_ID</th>
+                                <th class="pb-2">Emissions_Scope2</th>
+                                <th class="pb-2">Carbon_Offset</th>
+                                <th class="pb-2">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-green-400">
+                            <tr><td class="py-2">ZETTA-992</td><td class="py-2">14.2 MT</td><td class="py-2">VERIFIED</td><td class="py-2 text-emerald-400">CLEARED</td></tr>
+                            <tr><td class="py-2">ZETTA-993</td><td class="py-2">08.7 MT</td><td class="py-2">VERIFIED</td><td class="py-2 text-emerald-400">CLEARED</td></tr>
+                            <tr><td class="py-2">ZETTA-994</td><td class="py-2">22.1 MT</td><td class="py-2">PENDING</td><td class="py-2 text-emerald-400">CLEARED</td></tr>
+                            <tr><td class="py-2">ZETTA-995</td><td class="py-2">11.5 MT</td><td class="py-2">VERIFIED</td><td class="py-2 text-emerald-400">CLEARED</td></tr>
+                            <tr><td class="py-2">ZETTA-996</td><td class="py-2">19.8 MT</td><td class="py-2">VERIFIED</td><td class="py-2 text-emerald-400">CLEARED</td></tr>
+                            <tr><td class="py-2">ZETTA-997</td><td class="py-2">05.4 MT</td><td class="py-2">VERIFIED</td><td class="py-2 text-emerald-400">CLEARED</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Mission Briefing & Controls -->
+        <div class="flex flex-col gap-6">
+            <div class="sith-panel rounded-xl p-6 flex-1 flex flex-col justify-between">
+                <div>
+                    <p class="text-gray-400 text-sm mb-6 leading-relaxed">
+                        > INTERCEPTED COMMUNIQUE... <br>
+                        > WARNING: The Imperial energy database is highly corrupted and fragmented. Manual sorting will take centuries. <br><br>
+                        > DIRECTIVE: Deploy an automated Python/Pandas slicer script to override the security protocols, clean the data, and streamline the database updates before we are discovered.
+                    </p>
+
+                    <!-- The Action Area -->
+                    <div class="mt-8 border-t border-red-900/50 pt-6">
+                        <button id="override-btn" class="w-full btn-sith py-4 rounded font-bold tracking-widest uppercase text-sm cursor-pointer relative overflow-hidden group">
+                            <span class="relative z-10 flex items-center justify-center gap-2">
+                                <span>⚠️</span> Execute Override Script
+                            </span>
+                        </button>
+
+                        <!-- Loading Bar (Hidden Initially) -->
+                        <div id="loading-container" class="hidden mt-4">
+                            <div class="flex justify-between text-[10px] text-red-500 mb-1 tracking-widest uppercase">
+                                <span>Deploying Script...</span>
+                                <span>Injecting SQL Queries</span>
+                            </div>
+                            <div class="w-full bg-gray-900 border border-red-900 rounded-full h-3 overflow-hidden">
+                                <div id="loading-bar" class="bg-red-600 h-full w-0"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Hidden Real-World Translation Panel -->
+    <section id="realWorldPanel" class="hidden border border-emerald-500/30 bg-emerald-900/10 shadow-[0_0_15px_rgba(16,185,129,0.1)] rounded-xl p-6 md:p-8 transition-opacity duration-500 relative z-10 mt-4">
+        <h2 class="text-xl font-bold text-emerald-400 mb-4 uppercase tracking-wider">Mission Accomplished: The Real-World Impact</h2>
+        <div class="space-y-3 text-sm text-gray-300 leading-relaxed">
+            <p><strong>The Reality:</strong> In business operations, slicing through corrupted databanks requires advanced automation.</p>
+            <p><strong>The Technical Flex:</strong> I analyzed 5,000-row datasets and developed SQL queries to streamline clean energy project database updates. To optimize this permanently, I built a 200-line automation script using Python and Pandas.</p>
+            <p><strong>The Result:</strong> Streamlined complex database updates and navigated strict corporate carbon accounting regulations (Scope 2 emissions) to secure actionable, perfectly clean data.</p>
+        </div>
+    </section>
+
+    <!-- Game Logic Script -->
+    <script>
+        const terminalContent = document.getElementById('terminal-content');
+        const cleanData = document.getElementById('clean-data');
+        const overrideBtn = document.getElementById('override-btn');
+        const loadingContainer = document.getElementById('loading-container');
+        const loadingBar = document.getElementById('loading-bar');
+        const realWorldPanel = document.getElementById('realWorldPanel');
+
+        // Generate chaotic text
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=';
+        function generateChaos() {
+            let result = '';
+            for (let i = 0; i < 40; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        // Auto-scrolling terminal logic
+        let chaosInterval = setInterval(() => {
+            const line = document.createElement('div');
+            // Randomly color some lines red to look like hard errors
+            const isError = Math.random() > 0.7;
+            line.className = isError ? 'text-red-500' : 'text-green-500/70';
+            line.innerText = `[SEC-FAIL] 0x${Math.floor(Math.random()*9999)}: ${generateChaos()}`;
+            
+            terminalContent.appendChild(line);
+            
+            // Keep only the last 12 lines so it doesn't overflow infinitely
+            if (terminalContent.children.length > 12) {
+                terminalContent.removeChild(terminalContent.firstChild);
+            }
+        }, 80);
+
+        // Action when button is clicked
+        overrideBtn.addEventListener('click', () => {
+            // Disable button
+            overrideBtn.classList.add('hidden');
+            loadingContainer.classList.remove('hidden');
+            
+            // Trigger loading animation class
+            loadingBar.classList.add('animate-load');
+
+            // Wait for 2.5 seconds (the length of the CSS animation)
+            setTimeout(() => {
+                // Stop the chaos
+                clearInterval(chaosInterval);
+                
+                // Swap the views
+                terminalContent.classList.add('hidden');
+                cleanData.classList.remove('hidden');
+                
+                // Show the resume achievement
+                realWorldPanel.classList.remove('hidden');
+                
+                // Flash the terminal container success color
+                const terminalContainer = document.getElementById('terminal-container');
+                terminalContainer.classList.remove('border-gray-800');
+                terminalContainer.classList.add('border-emerald-500', 'shadow-[0_0_15px_rgba(16,185,129,0.3)]');
+                
+            }, 2500);
+        });
+    </script>
+
+    <!-- Hyperdrive Navigation Script -->
+    <script>
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                
+                if (href && !href.startsWith('#') && this.getAttribute('target') !== '_blank') {
+                    e.preventDefault(); 
+                    document.body.classList.add('hyperdrive-active'); 
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 700); 
+                }
+            });
+        });
+    </script>
+</body>
+</html>

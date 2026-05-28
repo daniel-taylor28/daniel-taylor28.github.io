@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniel Taylor | Strategy & Operations Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Master Prompt Theme: Star Wars Hologram Dashboard */
+        body { 
+            background-color: #030712;
+            color: #e5e7eb; 
+            font-family: 'Courier New', Courier, monospace; 
+            position: relative;
+            overflow-x: hidden; /* Prevents scrollbars during animation */
+        }
+
+        /* --- BACKGROUND LAYERS --- */
+        /* We use ::before for normal stars and ::after for the hyperdrive streaks so the UI never distorts */
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 200vw;
+            height: 200vh;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            pointer-events: none;
+            transition: transform 0.8s cubic-bezier(0.5, 0, 0.1, 1), opacity 0.8s ease-in;
+        }
+
+        /* The Base Starfield */
+        body::before {
+            background-image: 
+                radial-gradient(1px 1px at 15px 15px, rgba(255, 255, 255, 0.8) 100%, transparent),
+                radial-gradient(1px 1px at 75px 25px, rgba(255, 255, 255, 0.4) 100%, transparent),
+                radial-gradient(1.5px 1.5px at 135px 85px, rgba(224, 242, 254, 0.6) 100%, transparent),
+                radial-gradient(1px 1px at 15px 115px, rgba(34, 211, 238, 0.3) 100%, transparent),
+                radial-gradient(2px 2px at 90px 140px, rgba(255, 255, 255, 0.5) 100%, transparent),
+                radial-gradient(1px 1px at 180px 40px, rgba(255, 255, 255, 0.3) 100%, transparent),
+                radial-gradient(1px 1px at 220px 170px, rgba(224, 242, 254, 0.7) 100%, transparent);
+            background-size: 250px 250px;
+            opacity: 1;
+        }
+
+        /* The Radial Hyperdrive Streaks (Hidden by default) */
+        body::after {
+            background: repeating-conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                transparent 3deg,
+                rgba(255, 255, 255, 0.9) 3.1deg,
+                rgba(255, 255, 255, 0.9) 3.3deg,
+                transparent 3.4deg,
+                transparent 12deg,
+                rgba(224, 242, 254, 0.7) 12.1deg,
+                rgba(224, 242, 254, 0.7) 12.4deg,
+                transparent 12.5deg
+            );
+            /* Masks the center to create the illusion of forward movement */
+            -webkit-mask-image: radial-gradient(circle, transparent 15%, black 70%);
+            mask-image: radial-gradient(circle, transparent 15%, black 70%);
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.1); /* Starts tiny and hidden */
+        }
+
+        /* --- HYPERDRIVE ANIMATION STATE --- */
+        /* Pushes normal stars away and fades them */
+        body.hyperdrive-active::before {
+            transform: translate(-50%, -50%) scale(3);
+            opacity: 0;
+        }
+
+        /* Pulls the long radial streaks forward */
+        body.hyperdrive-active::after {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(2);
+        }
+
+        /* --- UI STYLING --- */
+        .hologram-panel { 
+            background: rgba(8, 145, 178, 0.05);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.1);
+        }
+        .nav-link { transition: all 0.3s ease; }
+        .nav-link:hover { color: #22d3ee; text-shadow: 0 0 8px rgba(34, 211, 238, 0.5); }
+        .btn-primary {
+            background: rgba(8, 145, 178, 0.2);
+            border: 1px solid #22d3ee;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: rgba(8, 145, 178, 0.4);
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <nav class="border-b border-cyan-900/50 p-6 bg-[#030712]/90 sticky top-0 z-50 backdrop-blur-sm">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="text-cyan-400 font-bold text-xl tracking-widest uppercase">DT_Terminal</div>
+            <div class="space-x-8 text-sm uppercase tracking-wider font-semibold text-gray-400">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#projects" class="nav-link">Case Studies</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-6xl mx-auto w-full p-6 md:p-12 space-y-24">
+
+        <section id="home" class="grid md:grid-cols-2 gap-12 items-center pt-12">
+            <div class="space-y-6">
+                <p class="text-cyan-500 text-sm tracking-widest uppercase">> SECURE CONNECTION ESTABLISHED</p>
+                <h1 class="text-5xl md:text-6xl font-bold text-white tracking-tight">Daniel Taylor</h1>
+                <h2 class="text-xl text-cyan-400 uppercase tracking-wider">Supply Chain & Business Operations</h2>
+                <p class="text-gray-400 leading-relaxed max-w-lg text-sm">
+                    Bridging the gap between raw data analytics and human-centric leadership. Seeking Summer 2027 internship opportunities to leverage process automation and strategic operational planning.
+                </p>
+                <div class="pt-4">
+                    <a href="#projects" class="btn-primary px-6 py-3 rounded text-cyan-300 font-bold uppercase tracking-wider text-sm inline-block">Access Databanks</a>
+                </div>
+            </div>
+            
+            <div class="hologram-panel rounded-xl p-2 aspect-square max-w-sm mx-auto w-full">
+                 <img src="Daniel_Headshot.jpg" alt="Daniel Taylor Headshot" class="rounded-lg border border-cyan-500/30 w-full h-full object-cover object-center grayscale hover:grayscale-0 transition-all duration-500">
+            </div>
+        </section>
+
+        <section id="about" class="hologram-panel rounded-xl p-8 md:p-12">
+            <div class="grid md:grid-cols-2 gap-12">
+                
+                <div class="space-y-6">
+                    <h3 class="text-2xl font-bold text-cyan-400 uppercase tracking-widest border-b border-cyan-900 pb-2">Operator's Log</h3>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Currently pursuing a degree in Supply Chain and Operations Management at Purdue University. The focus is on driving efficiency—whether that means evaluating discrete-event simulation platforms for large-scale workflows or writing Python scripts to automate clean energy database updates.
+                    </p>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Beyond the terminal, the true impact happens with people. Managing a team of 10 leaders to coordinate logistics for thousands of attendees requires the same strategic foresight as resolving data discrepancies with external suppliers.
+                    </p>
+                </div>
+
+                <div class="space-y-8">
+                    <div class="space-y-6">
+                        <h3 class="text-2xl font-bold text-cyan-400 uppercase tracking-widest border-b border-cyan-900 pb-2">Technical Specs</h3>
+                        <ul class="text-sm text-gray-300 space-y-3">
+                            <li><span class="text-cyan-500 font-bold">> Analytics:</span> Python, Pandas, SQL, Excel, Power BI</li>
+                            <li><span class="text-cyan-500 font-bold">> Execution:</span> Workflow Management, Lead Time Optimization, SOP Architecture</li>
+                            <li><span class="text-cyan-500 font-bold">> Leadership:</span> Cross-Functional Communication, Conflict Resolution, Peer Mentorship</li>
+                        </ul>
+                    </div>
+
+                    <div class="hologram-panel rounded-xl p-2 relative group cursor-pointer max-w-sm">
+                        <div class="absolute top-2 left-2 bg-[#030712]/80 px-2 py-1 text-[10px] text-cyan-500 border border-cyan-500/30 rounded-br z-10 font-bold tracking-widest backdrop-blur-sm">
+                            VISUAL_RECORD: PURDUE
+                        </div>
+                        
+                        <img src="Campus_Life.jpg" alt="Life at Purdue University" class="rounded-lg border border-cyan-500/30 w-full h-auto object-cover object-center grayscale group-hover:grayscale-0 transition-all duration-500">                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="projects" class="space-y-8">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl font-bold text-cyan-400 uppercase tracking-widest">Interactive Case Studies</h3>
+                <p class="text-gray-500 text-sm mt-2">Select a module to initiate simulation.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                
+                <a href="kessel-run.html" class="hologram-panel rounded-xl p-6 hover:bg-cyan-900/20 transition-all duration-300 group block cursor-pointer">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-2xl group-hover:scale-110 transition-transform">📦</span>
+                        <span class="text-[10px] text-emerald-400 border border-emerald-500/30 bg-emerald-900/20 px-2 py-1 rounded">ONLINE</span>
+                    </div>
+                    <h4 class="font-bold text-white mb-2 uppercase tracking-wider text-sm">Kessel Run Cargo Audit</h4>
+                    <p class="text-xs text-gray-400">Optimize vendor lead times and fix data discrepancies in this drop-ship supply chain simulation.</p>
+                </a>
+
+                <a href="r2d2-slicer.html" class="hologram-panel rounded-xl p-6 hover:bg-cyan-900/20 transition-all duration-300 group block cursor-pointer">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-2xl group-hover:scale-110 transition-transform">🤖</span>
+                        <span class="text-[10px] text-emerald-400 border border-emerald-500/30 bg-emerald-900/20 px-2 py-1 rounded">ONLINE</span>
+                    </div>
+                    <h4 class="font-bold text-white mb-2 uppercase tracking-wider text-sm">R2D2 Data Slicer</h4>
+                    <p class="text-xs text-gray-400">A Python and SQL automation module to process raw datasets and streamline updates.</p>
+                </a>
+
+                <a href="squadron-harmonizer.html" class="hologram-panel rounded-xl p-6 hover:bg-cyan-900/20 transition-all duration-300 group block cursor-pointer">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-2xl group-hover:scale-110 transition-transform">📡</span>
+                        <span class="text-[10px] text-emerald-400 border border-emerald-500/30 bg-emerald-900/20 px-2 py-1 rounded">ONLINE</span>
+                    </div>
+                    <h4 class="font-bold text-white mb-2 uppercase tracking-wider text-sm">Squadron Harmonizer</h4>
+                    <p class="text-xs text-gray-400">Synchronize team leadership and resolve chaotic bottlenecks in this interactive personnel alignment simulator.</p>
+                </a>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-cyan-900/50 py-8 text-center bg-[#030712]">
+        <p class="text-gray-500 text-xs tracking-widest">
+            OPERATIONAL TERMINAL V1.0 | <a href="https://linkedin.com/in/daniel-taylor28" target="_blank" class="text-cyan-600 hover:text-cyan-400 transition-colors">LINKEDIN_UPLINK</a>
+        </p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                
+                // Only trigger the animation if the link goes to a new page
+                if (href && !href.startsWith('#') && this.getAttribute('target') !== '_blank') {
+                    e.preventDefault(); 
+                    
+                    // Trigger the hyperspace CSS
+                    document.body.classList.add('hyperdrive-active'); 
+                    
+                    // Wait 700ms for the animation to finish, then navigate
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 700); 
+                }
+            });
+        });
+    </script>
+</body>
+</html>

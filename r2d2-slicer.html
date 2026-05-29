@@ -125,35 +125,28 @@
 </head>
 <body class="p-6 md:p-12 max-w-5xl mx-auto flex flex-col gap-8">
 
-    <!-- Navigation / Back Button -->
     <nav class="w-full">
         <a href="index.html" class="btn-primary px-4 py-2 rounded font-bold uppercase tracking-wider text-xs inline-flex items-center gap-2 relative z-10">
             <span class="text-lg leading-none">←</span> Return to Main Terminal
         </a>
     </nav>
 
-    <!-- Header -->
     <header class="text-center md:text-left border-b border-red-900 pb-4 relative z-10">
         <h1 class="text-3xl font-bold text-red-500 tracking-widest uppercase">R2D2 Data Slicer</h1>
         <p class="text-red-800 mt-2 text-sm">Imperial Databank Infiltration & Data Standardization</p>
     </header>
 
-    <!-- Main Console Grid -->
     <main class="grid md:grid-cols-2 gap-8 relative z-10">
         
-        <!-- Left Column: Retro Terminal Window -->
         <div class="sith-panel rounded-xl p-4 flex flex-col">
             <div class="flex justify-between items-center mb-3 border-b border-red-900 pb-2">
                 <span class="text-xs uppercase tracking-widest text-red-500">Target: Corrupted Imperial Databanks</span>
                 <span class="text-xs text-red-700 animate-pulse">ENCRYPTION: ACTIVE</span>
             </div>
             
-            <!-- Terminal Output Area -->
             <div id="terminal-container" class="terminal-screen rounded p-4 h-80 overflow-hidden text-xs flex flex-col justify-end border border-gray-800 relative">
-                <!-- Chaotic data will be injected here by JS -->
                 <div id="terminal-content" class="space-y-1 opacity-80"></div>
                 
-                <!-- Clean Data Table (Hidden initially) -->
                 <div id="clean-data" class="hidden w-full h-full flex-col">
                     <div class="text-center text-white mb-4 border-b border-green-500/50 pb-2">DATABANK DECRYPTED - 5,000 ROWS NORMALIZED</div>
                     <table class="w-full text-left text-[10px] md:text-xs">
@@ -178,7 +171,6 @@
             </div>
         </div>
 
-        <!-- Right Column: Mission Briefing & Controls -->
         <div class="flex flex-col gap-6">
             <div class="sith-panel rounded-xl p-6 flex-1 flex flex-col justify-between">
                 <div>
@@ -188,7 +180,6 @@
                         > DIRECTIVE: Deploy an automated Python/Pandas slicer script to override the security protocols, clean the data, and streamline the database updates before we are discovered.
                     </p>
 
-                    <!-- The Action Area -->
                     <div class="mt-8 border-t border-red-900/50 pt-6">
                         <button id="override-btn" class="w-full btn-sith py-4 rounded font-bold tracking-widest uppercase text-sm cursor-pointer relative overflow-hidden group">
                             <span class="relative z-10 flex items-center justify-center gap-2">
@@ -196,7 +187,6 @@
                             </span>
                         </button>
 
-                        <!-- Loading Bar (Hidden Initially) -->
                         <div id="loading-container" class="hidden mt-4">
                             <div class="flex justify-between text-[10px] text-red-500 mb-1 tracking-widest uppercase">
                                 <span>Deploying Script...</span>
@@ -213,17 +203,27 @@
 
     </main>
 
-    <!-- Hidden Real-World Translation Panel -->
     <section id="realWorldPanel" class="hidden border border-emerald-500/30 bg-emerald-900/10 shadow-[0_0_15px_rgba(16,185,129,0.1)] rounded-xl p-6 md:p-8 transition-opacity duration-500 relative z-10 mt-4">
         <h2 class="text-xl font-bold text-emerald-400 mb-4 uppercase tracking-wider">Mission Accomplished: The Real-World Impact</h2>
-        <div class="space-y-3 text-sm text-gray-300 leading-relaxed">
-            <p><strong>The Reality:</strong> In business operations, slicing through corrupted databanks requires advanced automation.</p>
-            <p><strong>The Technical Flex:</strong> I analyzed 5,000-row datasets and developed SQL queries to streamline clean energy project database updates. To optimize this permanently, I built a 200-line automation script using Python and Pandas.</p>
-            <p><strong>The Result:</strong> Streamlined complex database updates and navigated strict corporate carbon accounting regulations (Scope 2 emissions) to secure actionable, perfectly clean data.</p>
+        
+        <div class="space-y-6 text-sm text-gray-300 leading-relaxed">
+            <div>
+                <span class="text-emerald-400 font-bold uppercase tracking-wider block mb-1">The Reality</span>
+                <p>Slicing through fragmented databases requires astromech-like automation. At Zettawatts, managing large-scale clean energy project databases meant dealing with disparate, unsynchronized records. Relying on manual cross-referencing to match and update this information creates severe operational bottlenecks and threatens core data integrity.</p>
+            </div>
+
+            <div>
+                <span class="text-emerald-400 font-bold uppercase tracking-wider block mb-1">The Strategy</span>
+                <p>To bypass these manual processes, I deployed a custom data-slicing protocol. Interfacing directly with the Zettawatts systems, I built an automation script using Python and Pandas to ingest 5,000-row datasets, dynamically identify matching project records, and extract the most current values. From there, I developed SQL queries to slice through the noise and seamlessly push these synchronized updates into the central database.</p>
+            </div>
+
+            <div>
+                <span class="text-emerald-400 font-bold uppercase tracking-wider block mb-1">The Result</span>
+                <p>By fully automating the extraction and matching process, this protocol eliminated tedious manual record-keeping, securing actionable, perfectly synchronized data and ensuring the Zettawatts energy project databases remained completely accurate and fully operational.</p>
+            </div>
         </div>
     </section>
 
-    <!-- Game Logic Script -->
     <script>
         const terminalContent = document.getElementById('terminal-content');
         const cleanData = document.getElementById('clean-data');
@@ -288,7 +288,6 @@
         });
     </script>
 
-    <!-- Hyperdrive Navigation Script -->
     <script>
         document.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', function(e) {
